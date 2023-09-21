@@ -32,8 +32,8 @@
 		pinctrl-names = "spi_default", "spi_sleep";
 		pinctrl-0 = <&spi8_default &spi8_cs0_active>;
 		pinctrl-1 = <&spi8_sleep &spi8_cs0_sleep>;
-		clocks = <&clock_gcc clk_gcc_blsp2_ahb_clk>,
-			<&clock_gcc clk_gcc_blsp2_qup4_spi_apps_clk>;
+		clocks = <&gcc GCC_BLSP2_AHB_CLK>,
+			<&gcc BLSP2_QUP4_SPI_APPS_CLK_SRC>;
 		clock-names = "iface_clk", "core_clk";
 		qcom,infinite-mode = <0>;
 		qcom,use-bam;
@@ -75,10 +75,10 @@
 			<55 512 0 0>,
 			<55 512 120000 1200000>,
 			<55 512 393600 3936000>;
-		clocks = <&clock_gcc clk_crypto_clk_src>,
-			 <&clock_gcc clk_gcc_crypto_clk>,
-			 <&clock_gcc clk_gcc_crypto_ahb_clk>,
-			 <&clock_gcc clk_gcc_crypto_axi_clk>;
+		clocks = <&gcc CRYPTO_CLK_SRC>,
+			 <&gcc GCC_CRYPTO_CLK>,
+			 <&gcc GCC_CRYPTO_AHB_CLK>,
+			 <&gcc GCC_CRYPTO_AXI_CLK>;
 		clock-names = "core_clk_src", "core_clk",
 				"iface_clk", "bus_clk";
 		qcom,ce-opp-freq = <100000000>;

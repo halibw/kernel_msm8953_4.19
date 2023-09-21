@@ -12,6 +12,7 @@
  */
 
 #include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/clock/qcom,gcc-msm8953.h>
 
 &blsp1_uart0 {
 	status = "ok";
@@ -51,7 +52,7 @@
 		pinctrl-0 = <&nfc_int_active &nfc_disable_active
 						&nfc_clk_default>;
 		pinctrl-1 = <&nfc_int_suspend &nfc_disable_suspend>;
-		clocks = <&clock_gcc clk_bb_clk2_pin>;
+		clocks = <&rpmcc RPM_SMD_BB_CLK2_PIN>;
 		clock-names = "ref_clk";
 	};
 };

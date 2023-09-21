@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  */
 
-#include <dt-bindings/clock/msm-clocks-8953.h>
+#include <dt-bindings/clock/qcom,gcc-msm8953.h>
 
 &soc {
 	kgsl_smmu: arm,smmu-kgsl@1c40000 {
@@ -32,8 +32,8 @@
 		qcom,skip-init;
 		vdd-supply = <&gdsc_oxili_cx>;
 		qcom,regulator-names = "vdd";
-		clocks = <&clock_gcc_gfx clk_gcc_oxili_ahb_clk>,
-			<&clock_gcc_gfx clk_gcc_bimc_gfx_clk>;
+		clocks = <&gcc GCC_OXILI_AHB_CLK>,
+			<&gcc GCC_BIMC_GFX_CLK>;
 		clock-names = "gpu_ahb_clk", "gcc_bimc_gfx_clk";
 	};
 
@@ -95,8 +95,8 @@
 				<GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>,
 				<GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
 				<GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
-		clocks = <&clock_gcc clk_gcc_smmu_cfg_clk>,
-			  <&clock_gcc clk_gcc_apss_tcu_async_clk>;
+		clocks = <&gcc GCC_SMMU_CFG_CLK>,
+			  <&gcc GCC_APSS_TCU_ASYNC_CLK>;
 		clock-names = "iface_clk", "core_clk";
 	};
 };

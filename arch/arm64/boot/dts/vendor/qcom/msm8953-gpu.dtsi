@@ -17,10 +17,10 @@
 		qcom,firmware-name = "a506_zap";
 		memory-region = <&gpu_mem>;
 		qcom,mas-crypto = <&mas_crypto>;
-		clocks = <&clock_gcc clk_gcc_crypto_clk>,
-		<&clock_gcc clk_gcc_crypto_ahb_clk>,
-		<&clock_gcc clk_gcc_crypto_axi_clk>,
-		<&clock_gcc clk_crypto_clk_src>;
+		clocks = <&gcc GCC_CRYPTO_CLK>,
+		<&gcc GCC_CRYPTO_AHB_CLK>,
+		<&gcc GCC_CRYPTO_AXI_CLK>,
+		<&gcc CRYPTO_CLK_SRC>;
 		clock-names = "scm_core_clk", "scm_iface_clk",
 				"scm_bus_clk", "scm_core_clk_src";
 		qcom,proxy-clock-names = "scm_core_clk", "scm_iface_clk",
@@ -78,12 +78,12 @@
 
 		qcom,snapshot-size = <0x200000>; //bytes
 
-		clocks = <&clock_gcc_gfx clk_gcc_oxili_gfx3d_clk>,
-			<&clock_gcc_gfx clk_gcc_oxili_ahb_clk>,
-			<&clock_gcc_gfx clk_gcc_bimc_gfx_clk>,
-			<&clock_gcc_gfx clk_gcc_bimc_gpu_clk>,
-			<&clock_gcc_gfx clk_gcc_oxili_timer_clk>,
-			<&clock_gcc_gfx clk_gcc_oxili_aon_clk>;
+		clocks = <&gcc GCC_OXILI_GFX3D_CLK>,
+			<&gcc GCC_OXILI_AHB_CLK>,
+			<&gcc GCC_BIMC_GFX_CLK>,
+			<&gcc GCC_BIMC_GPU_CLK>,
+			<&gcc GCC_OXILI_TIMER_CLK>,
+			<&gcc GCC_OXILI_AON_CLK>;
 
 		clock-names = "core_clk", "iface_clk",
 			      "mem_iface_clk", "alt_mem_iface_clk",
@@ -262,8 +262,8 @@
 		qcom,protect = <0x40000 0x10000>;
 		qcom,micro-mmu-control = <0x6000>;
 
-		clocks = <&clock_gcc_gfx clk_gcc_oxili_ahb_clk>,
-			 <&clock_gcc_gfx clk_gcc_bimc_gfx_clk>;
+		clocks = <&gcc GCC_OXILI_AHB_CLK>,
+			 <&gcc GCC_BIMC_GFX_CLK>;
 
 		clock-names = "gpu_ahb_clk", "gcc_bimc_gfx_clk";
 

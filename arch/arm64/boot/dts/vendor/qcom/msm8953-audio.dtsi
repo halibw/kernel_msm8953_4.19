@@ -337,7 +337,7 @@
 		pinctrl-0 = <&tasha_mclk_default>;
 		pinctrl-1 = <&tasha_mclk_default>;
 		qcom,audio-ref-clk-gpio = <&pm8953_gpios 1 0>;
-		clocks = <&clock_gcc clk_div_clk2>;
+		clocks = <&rpmcc RPM_SMD_DIV_CLK2>;
 	};
 
 	wcd_rst_gpio: msm_cdc_pinctrl@67 {
@@ -373,8 +373,7 @@
 		qcom,wcd-rst-gpio-node = <&wcd_rst_gpio>;
 
 		clock-names = "wcd_clk", "wcd_native_clk";
-		clocks = <&clock_audio clk_audio_pmi_clk>,
-			<&clock_audio clk_audio_ap_clk2>;
+		clocks = <&clock_audio 0>;
 
 		qcom,cdc-static-supplies =
 				"cdc-vdd-buck",
