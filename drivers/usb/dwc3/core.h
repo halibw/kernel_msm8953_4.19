@@ -237,6 +237,7 @@
 
 /* Global Configuration Register */
 #define DWC3_GCTL_PWRDNSCALE(n)	((n) << 19)
+#define DWC3_GCTL_PWRDNSCALEMASK (0xFFF80000)
 #define DWC3_GCTL_U2RSTECN	BIT(16)
 #define DWC3_GCTL_RAMCLKSEL(x)	(((x) & DWC3_GCTL_CLK_MASK) << 6)
 #define DWC3_GCTL_CLK_BUS	(0)
@@ -258,6 +259,9 @@
 #define DWC3_GCTL_U2EXIT_LFPS		BIT(2)
 #define DWC3_GCTL_GBLHIBERNATIONEN	BIT(1)
 #define DWC3_GCTL_DSBLCLKGTNG		BIT(0)
+
+/* Global User Control Register */
+#define DWC3_GUCTL_REFCLKPER            (0x3FF << 22)
 
 /* Global User Control Register */
 #define DWC3_GUCTL_HSTINAUTORETRY	BIT(14)
@@ -389,6 +393,11 @@
 /* Global Frame Length Adjustment Register */
 #define DWC3_GFLADJ_30MHZ_SDBND_SEL		BIT(7)
 #define DWC3_GFLADJ_30MHZ_MASK			0x3f
+
+#define DWC3_GFLADJ_REFCLK_240MHZDECR_PLS1      (1 << 31)
+#define DWC3_GFLADJ_REFCLK_240MHZ_DECR          (0x7F << 24)
+#define DWC3_GFLADJ_REFCLK_LPM_SEL              (1 << 23)
+#define DWC3_GFLADJ_REFCLK_FLADJ                (0x3FFF << 8)
 
 /* Global User Control Register 2 */
 #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
@@ -641,6 +650,19 @@
 struct dwc3_trb;
 
 /**
+ * struct dwc3_gadget_ep_cmd_params - representation of endpoint command
+ * parameters
+ * @param2: third parameter
+ * @param1: second parameter
+ * @param0: first parameter
+ */
+struct dwc3_gadget_ep_cmd_params {
+	u32	param2;
+	u32	param1;
+	u32	param0;
+};
+
+/**
  * struct dwc3_event_buffer - Software event buffer representation
  * @buf: _THE_ buffer
  * @cache: The buffer cache used in the threaded interrupt
@@ -791,6 +813,7 @@ struct dwc3_ep {
 	struct dwc3_ep_events	dbg_ep_events_diff;
 	struct timespec		dbg_ep_events_ts;
 	int			fifo_depth;
+	struct dwc3_gadget_ep_cmd_params ep_cfg_init_params;
 };
 
 enum dwc3_phy {
@@ -1318,6 +1341,7 @@ struct dwc3 {
 	unsigned		ssp_u3_u0_quirk:1;
 	unsigned		tx_de_emphasis:2;
 	unsigned		err_evt_seen:1;
+	unsigned                is_drd:1;
 	unsigned		disable_clk_gating:1;
 	unsigned		enable_bus_suspend:1;
 	unsigned		usb3_u1u2_disable:1;
@@ -1512,19 +1536,6 @@ union dwc3_event {
 	struct dwc3_event_depevt	depevt;
 	struct dwc3_event_devt		devt;
 	struct dwc3_event_gevt		gevt;
-};
-
-/**
- * struct dwc3_gadget_ep_cmd_params - representation of endpoint command
- * parameters
- * @param2: third parameter
- * @param1: second parameter
- * @param0: first parameter
- */
-struct dwc3_gadget_ep_cmd_params {
-	u32	param2;
-	u32	param1;
-	u32	param0;
 };
 
 /*
