@@ -19,4 +19,8 @@
 #define AUDIO_LPASS_MCLK_8	10
 #define AUDIO_LPASS_AUDIO_HW_VOTE	11
 
+#ifdef CONFIG_ARCH_MSM8953
+#define clk_audio_pmi_lnbb_clk   0x57312343
+#endif
+
 #endif
