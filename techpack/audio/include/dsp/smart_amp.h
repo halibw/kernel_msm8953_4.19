@@ -25,8 +25,8 @@ struct afe_smartamp_set_params_t {
 
 struct afe_smartamp_config_command {
 	struct apr_hdr                      hdr;
-	struct afe_port_cmd_set_param_v2    param;
-	struct afe_port_param_data_v2       pdata;
+	struct afe_rtac_user_data_set_v2    param;
+	struct afe_rtac_user_data_set_v3    pdata;
 	struct afe_smartamp_set_params_t  prot_config;
 } __packed;
 
@@ -36,14 +36,14 @@ struct afe_smartamp_get_params_t {
 
 struct afe_smartamp_get_calib {
 	struct apr_hdr hdr;
-	struct afe_port_cmd_get_param_v2   get_param;
-	struct afe_port_param_data_v2      pdata;
+	struct afe_rtac_user_data_get_v2   get_param;
+	struct afe_rtac_user_data_get_v3   pdata;
 	struct afe_smartamp_get_params_t   res_cfg;
 } __packed;
 
 struct afe_smartamp_calib_get_resp {
 	uint32_t status;
-	struct afe_port_param_data_v2 pdata;
+	struct afe_rtac_user_data_get_v3 pdata;
 	struct afe_smartamp_get_params_t res_cfg;
 } __packed;
 

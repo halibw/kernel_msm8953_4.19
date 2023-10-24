@@ -1982,6 +1982,15 @@ struct afe_rtac_user_data_set_v3 {
 	/* The size of the parameter header and parameter data */
 	u32 payload_size;
 
+	/* ID of the module to be queried */
+	u32 module_id;
+
+	/* ID of the parameter to be queried. */
+	u32 param_id;
+
+	/* Actual size of the data for the module_id/param_id pair */
+	u16 param_size;
+
 	/* The parameter header for the parameter data to set */
 	struct param_hdr_v3 param_hdr;
 
@@ -2010,6 +2019,11 @@ struct afe_rtac_user_data_get_v2 {
 
 	/* The parameter data to be filled when sent inband */
 	struct param_hdr_v1 param_hdr;
+
+	/* legacy data*/
+	u32 payload_address_lsw;
+	u32 payload_address_msw;
+	u32 mem_map_handle;
 } __packed;
 
 struct afe_rtac_user_data_get_v3 {
@@ -2023,6 +2037,11 @@ struct afe_rtac_user_data_get_v3 {
 
 	/* The parameter data to be filled when sent inband */
 	struct param_hdr_v3 param_hdr;
+
+	/* legacy ID */
+	u32 module_id;
+	u32 param_id;
+	u16 param_size;
 } __packed;
 
 #define AFE_PORT_CMD_SET_PARAM_V2	0x000100EF
