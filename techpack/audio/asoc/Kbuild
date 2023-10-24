@@ -231,6 +231,7 @@ ifdef CONFIG_SND_HWDEP_ROUTING
 endif
 ifdef CONFIG_QTI_PP
 	PLATFORM_OBJS += msm-qti-pp-config.o
+	CFLAGS_msm-qti-pp-config.o += $(call cc-option, -Wframe-larger-than=2048)
 endif
 
 LINUX_INC +=	-Iinclude/linux
@@ -250,19 +251,6 @@ CDEFINES +=	-DANI_LITTLE_BYTE_ENDIAN \
 		-D__linux__
 
 KBUILD_CPPFLAGS += $(CDEFINES)
-
-# Currently, for versions of gcc which support it, the kernel Makefile
-# is disabling the maybe-uninitialized warning.  Re-enable it for the
-# AUDIO driver.  Note that we must use EXTRA_CFLAGS here so that it
-# will override the kernel settings.
-ifeq ($(call cc-option-yn, -Wmaybe-uninitialized),y)
-EXTRA_CFLAGS += -Wmaybe-uninitialized
-endif
-#EXTRA_CFLAGS += -Wmissing-prototypes
-
-ifeq ($(call cc-option-yn, -Wheader-guard),y)
-EXTRA_CFLAGS += -Wheader-guard
-endif
 
 ifeq ($(KERNEL_BUILD), 0)
 KBUILD_EXTRA_SYMBOLS +=$(OUT)/obj/vendor/qcom/opensource/audio-kernel/dsp/Module.symvers

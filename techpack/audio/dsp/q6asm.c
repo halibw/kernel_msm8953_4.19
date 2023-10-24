@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -84,6 +85,8 @@ enum {
 	WAIT_CMD,
 	NO_WAIT_CMD
 };
+
+extern bool msm_enable_legacy_adsp_hacks;
 
 #define ASM_SET_BIT(n, x)	(n |= 1 << x)
 #define ASM_TEST_BIT(n, x)	((n >> x) & 1)
@@ -2289,6 +2292,15 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 
 		config_debug_fs_read_cb();
 
+		if (data->payload_size != (READDONE_IDX_SEQ_ID + 1) * sizeof(uint32_t)) {
+			pr_err("%s:  payload size of %d is less than expected %ld.\n",
+					__func__, data->payload_size,
+					((READDONE_IDX_SEQ_ID + 1) * sizeof(uint32_t)));
+			spin_unlock_irqrestore(
+				&(session[session_id].session_lock),
+				flags);
+			return -EINVAL;
+		}
 		dev_vdbg(ac->dev, "%s: ReadDone: status=%d buff_add=0x%x act_size=%d offset=%d\n",
 				__func__, payload[READDONE_IDX_STATUS],
 				payload[READDONE_IDX_BUFADD_LSW],
@@ -3316,9 +3328,9 @@ int q6asm_open_read_v4(struct audio_client *ac, uint32_t format,
 			uint16_t bits_per_sample, bool ts_mode,
 			uint32_t enc_cfg_id)
 {
-#if 1
-	return q6asm_open_read_v3(ac, format, bits_per_sample);
-#endif
+	if (msm_enable_legacy_adsp_hacks)
+		return q6asm_open_read_v3(ac, format, bits_per_sample);
+
 	return __q6asm_open_read(ac, format, bits_per_sample,
 				 PCM_MEDIA_FORMAT_V4 /*media fmt block ver*/,
 				 ts_mode, enc_cfg_id);
@@ -3668,9 +3680,9 @@ EXPORT_SYMBOL(q6asm_open_write_v3);
 int q6asm_open_write_v4(struct audio_client *ac, uint32_t format,
 			uint16_t bits_per_sample)
 {
-#if 1
-	return q6asm_open_write_v3(ac, format, bits_per_sample);
-#endif
+	if (msm_enable_legacy_adsp_hacks)
+		return q6asm_open_write_v3(ac, format, bits_per_sample);
+
 	return __q6asm_open_write(ac, format, bits_per_sample,
 				  ac->stream_id, false /*gapless*/,
 				  PCM_MEDIA_FORMAT_V4 /*pcm_format_block_ver*/);
@@ -3735,10 +3747,10 @@ int q6asm_stream_open_write_v4(struct audio_client *ac, uint32_t format,
 			       uint16_t bits_per_sample, int32_t stream_id,
 			       bool is_gapless_mode)
 {
-#if 1
-	return q6asm_stream_open_write_v3(ac, format, bits_per_sample,
-						stream_id, is_gapless_mode);
-#endif
+	if (msm_enable_legacy_adsp_hacks)
+		return q6asm_stream_open_write_v3(ac, format, bits_per_sample,
+							stream_id, is_gapless_mode);
+
 	return __q6asm_open_write(ac, format, bits_per_sample,
 				  stream_id, is_gapless_mode,
 				  PCM_MEDIA_FORMAT_V4 /*pcm_format_block_ver*/);
@@ -5169,11 +5181,10 @@ int q6asm_enc_cfg_blk_pcm_v4(struct audio_client *ac,
 	u32 frames_per_buf = 0;
 	int rc;
 
-#if 1
-	return q6asm_enc_cfg_blk_pcm_v3(ac, rate, channels, bits_per_sample,
-					use_default_chmap, use_back_flavor,
-					channel_map, sample_word_size);
-#endif
+	if (msm_enable_legacy_adsp_hacks)
+		return q6asm_enc_cfg_blk_pcm_v3(ac, rate, channels, bits_per_sample,
+						use_default_chmap, use_back_flavor,
+						channel_map, sample_word_size);
 
 	if (!use_default_chmap && (channel_map == NULL)) {
 		pr_err("%s: No valid chan map and can't use default\n",
@@ -6755,12 +6766,12 @@ int q6asm_media_format_block_pcm_format_support_v4(struct audio_client *ac,
 						   uint16_t endianness,
 						   uint16_t mode)
 {
-#if 1
-	return q6asm_media_format_block_pcm_format_support_v3(ac, rate, channels,
-				bits_per_sample, stream_id,
-				use_default_chmap, channel_map,
-				sample_word_size);
-#endif
+	if (msm_enable_legacy_adsp_hacks)
+		return q6asm_media_format_block_pcm_format_support_v3(ac, rate, channels,
+					bits_per_sample, stream_id,
+					use_default_chmap, channel_map,
+					sample_word_size);
+
 	if (!use_default_chmap && (channel_map == NULL)) {
 		pr_err("%s: No valid chan map and can't use default\n",
 			__func__);
@@ -7188,11 +7199,11 @@ int q6asm_media_format_block_multi_ch_pcm_v4(struct audio_client *ac,
 					     uint16_t endianness,
 					     uint16_t mode)
 {
-#if 1
-	return q6asm_media_format_block_multi_ch_pcm_v3(ac, rate, channels,
-				use_default_chmap, channel_map,
-				bits_per_sample, sample_word_size);
-#endif
+	if (msm_enable_legacy_adsp_hacks)
+		return q6asm_media_format_block_multi_ch_pcm_v3(ac, rate, channels,
+					use_default_chmap, channel_map,
+					bits_per_sample, sample_word_size);
+
 	return __q6asm_media_format_block_multi_ch_pcm_v4(ac, rate, channels,
 							  use_default_chmap,
 							  channel_map,
