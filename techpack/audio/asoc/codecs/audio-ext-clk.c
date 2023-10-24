@@ -13,8 +13,9 @@
 #include <linux/platform_device.h>
 #include <linux/gpio.h>
 #include <linux/of_gpio.h>
-#include <dt-bindings/clock/audio-ext-clk.h>
-#include <sound/q6afe-v2.h>
+#include <dt-bindings/clock/qcom,audio-ext-clk.h>
+#include <dt-bindings/clock/msm-clocks-8953.h>
+#include <dsp/q6afe-v2.h>
 #include "audio-ext-clk-up.h"
 
 struct pinctrl_info {
