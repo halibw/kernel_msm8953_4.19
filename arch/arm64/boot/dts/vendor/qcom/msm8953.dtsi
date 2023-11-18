@@ -1906,6 +1906,7 @@
 			snps,usb2-l1-disable;
 			snps,hird-threshold = /bits/ 8 <0x0>;
 			maximum-speed = "super-speed";
+			status = "disabled";
 		};
 
 		qcom,usbbam@7104000 {
