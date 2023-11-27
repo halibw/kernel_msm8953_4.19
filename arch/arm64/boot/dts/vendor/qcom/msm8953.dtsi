@@ -180,6 +180,7 @@
 		i2c5 = &i2c_5;
 		spi3 = &spi_3;
 		spi6 = &spi_6;
+		spi8 = &spi_8;
 	};
 
 	soc: soc {
@@ -452,6 +453,34 @@
 		qcom,ce-opp-freq = <100000000>;
 		status = "okay";
 	};
+
+	qseecom@84A00000 {
+                compatible = "qcom,qseecom";
+                reg = <0x84A00000 0x1900000>;
+                reg-names = "secapp-region";
+                qcom,hlos-num-ce-hw-instances = <1>;
+                qcom,hlos-ce-hw-instance = <0>;
+                qcom,qsee-ce-hw-instance = <0>;
+                qcom,disk-encrypt-pipe-pair = <2>;
+                qcom,support-fde;
+                qcom,commonlib64-loaded-by-uefi;
+                qcom,msm-bus,name = "qseecom-noc";
+                qcom,msm-bus,num-cases = <4>;
+                qcom,msm-bus,num-paths = <1>;
+                qcom,support-bus-scaling;
+                qcom,msm-bus,vectors-KBps =
+                        <55 512 0 0>,
+                        <55 512 0 0>,
+                        <55 512 120000 1200000>,
+                        <55 512 393600 3936000>;
+                clocks = <&clock_gcc clk_crypto_clk_src>,
+                         <&clock_gcc clk_gcc_crypto_clk>,
+                         <&clock_gcc clk_gcc_crypto_ahb_clk>,
+                         <&clock_gcc clk_gcc_crypto_axi_clk>;
+                clock-names = "core_clk_src", "core_clk",
+                                "iface_clk", "bus_clk";
+                qcom,ce-opp-freq = <100000000>;
+        };
 
 	qcom_tzlog: tz-log@08600720 {
 		compatible = "qcom,tz-log";
@@ -731,6 +760,28 @@
 		qcom,master-id = <84>;
 		status = "disabled";
 	};
+
+	spi_8: spi@7af8000 { /* BLSP2 QUP4 */
+        compatible = "qcom,spi-qup-v2";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        reg-names = "spi_physical", "spi_bam_physical";
+        reg = <0x7af8000 0x600>,
+                <0x7ac4000 0x1f000>;
+        interrupt-names = "spi_irq", "spi_bam_irq";
+        interrupts = <0 102 0>, <0 239 0>;
+        spi-max-frequency = <50000000>;
+        clocks = <&clock_gcc clk_gcc_blsp2_ahb_clk>,
+                <&clock_gcc clk_gcc_blsp2_qup4_spi_apps_clk>;
+        clock-names = "iface_clk", "core_clk";
+        qcom,infinite-mode = <0>;
+        qcom,use-bam;
+        qcom,use-pinctrl;
+        qcom,ver-reg-exists;
+        qcom,bam-consumer-pipe-index = <10>;
+        qcom,bam-producer-pipe-index = <11>;
+        qcom,master-id = <84>;
+    };
 
 	i2c_1: i2c@78b5000 { /* BLSP1 QUP1 */
 		compatible = "qcom,i2c-msm-v2";
