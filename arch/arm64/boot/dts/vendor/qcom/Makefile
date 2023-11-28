@@ -682,7 +682,12 @@ dtb-$(CONFIG_ARCH_SDM845_VM) += sdm845-vm.dtb
 
 else # CONFIG_MACH_XIAOMI_OXYGEN
 
-dtb-$(CONFIG_MACH_XIAOMI_OXYGEN) += oxygen/msm8953-oxygen.dtb
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+dtbo-$(CONFIG_MACH_XIAOMI_OXYGEN) += msm8953-oxygen-overlay.dtbo
+msm8953-oxygen-overlay.dtbo-base := oxygen/msm8953-oxygen.dtb
+else
+dtb-$(CONFIG_MACH_XIAOMI_OXYGEN) += oxygen/msm8953-oxygen-dtb
+endif
 
 endif # CONFIG_MACH_XIAOMI_OXYGEN
 
