@@ -86,6 +86,10 @@
 	};
 };
 
+&qcom_tzlog {
+	status = "disabled";
+	};
+
 /* Custom changes */
 &soc {
 	restart@4ab000 {
